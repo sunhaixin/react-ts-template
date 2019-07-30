@@ -1,1 +1,1 @@
-# react-template
+# react-ts-template
