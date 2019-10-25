@@ -22,7 +22,16 @@ module.exports = {
       },
       {
         test: /\.(scss|css)$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', {
+          loader: 'sass-resources-loader',
+          options: {
+            resources: [
+              path.resolve(__dirname, '../src/static/style/var.scss'),
+              path.resolve(__dirname, '../src/static/style/func.scss'),
+              path.resolve(__dirname, '../src/static/style/common.scss'),
+            ]
+          }
+        }],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg)$/,
