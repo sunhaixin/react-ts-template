@@ -24,6 +24,7 @@
 		"whatwg-fetch": "^3.0.0"
 	},
 	"devDependencies": {
+		"autoprefixer": "^9.6.5",
 		"awesome-typescript-loader": "^5.2.1",
 		"clean-webpack-plugin": "^0.1.19",
 		"css-loader": "^1.0.1",
@@ -33,6 +34,8 @@
 		"mini-css-extract-plugin": "^0.7.0",
 		"node-sass": "^4.10.0",
 		"optimize-css-assets-webpack-plugin": "^5.0.1",
+		"postcss-loader": "^3.0.0",
+		"postcss-pxtorem": "^4.0.1",
 		"sass-loader": "^7.1.0",
 		"sass-resources-loader": "^2.0.1",
 		"typescript": "^3.5.3",
