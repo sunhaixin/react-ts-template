@@ -1,24 +1,9 @@
 {
   "eslint.enable": true,
-  "eslint.autoFixOnSave": true,
   "eslint.run": "onType",
   "eslint.options": {
     "extensions": [".js", ".vue"]
   },
-  "eslint.validate": [
-    "javascriptreact",
-    "vue",
-    "javascript",
-    {
-      "language": "vue"
-      // "autoFix": true
-    },
-    "html",
-    {
-      "language": "html"
-      // "autoFix": true
-    }
-  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }
