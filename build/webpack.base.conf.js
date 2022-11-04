@@ -1,95 +1,92 @@
-const path = require('path')
+const { resolve } = require("path");
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const optimizeCss = require('optimize-css-assets-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   entry: {
-    index: './src/index.tsx'
+    index: resolve(__dirname, '../src'),
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'index.[hash].js',
+    filename: 'js/[name].js',
+    path: resolve(__dirname, '../output'),
     publicPath: '/',
   },
   module: {
     rules: [
       {
-        test: /\.(tsx|ts|js|es6)$/,
-        use: 'awesome-typescript-loader',
-        exclude: [path.resolve(__dirname, '../node_modules')]
+        test: /(\.js$)|(\.ts$)|(\.tsx$)/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
       },
       {
-        test: /\.(scss|css)$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader', {
-          loader: 'sass-resources-loader',
-          options: {
-            resources: [
-              path.resolve(__dirname, '../src/static/style/var.scss'),
-              path.resolve(__dirname, '../src/static/style/func.scss'),
-              path.resolve(__dirname, '../src/static/style/common.scss'),
-            ]
+        test: /\.less$/,
+        exclude: /node_modules/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+      },
+      {
+        test: /(\.png$)|(\.gif$)|(\.jpg$)|(\.jpeg)|(\.webp)|(\.svg$)/,
+        exclude: /node_modules/,
+        type: 'asset',
+        generator: {
+          filename: 'img/[name].[contenthash][ext]'
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 2 * 1024
           }
-        }],
-      },
-      {
-        test: /\.(png|jpg|jpeg|gif|svg)$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 1024,
-            name: 'img/[name].[hash].[ext]',
-            fallback: 'file-loader'
-          }
-        }]
-      },
-      {
-        test: /\.(woff|woff2|ttc|ttf|eot|otf)/,
-        loader: 'file-loader',
-        options: {
-          name: 'font/[name].[hash].[ext]'
         }
-      }
+      },
+      {
+        test: /(\.ttf$)|(\.eot$)|(\.otf$)|(\.font$)|(\.fon)|(\.ttc$)|(\.woff$)/,
+        exclude: /node_modules/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'font/[name].[contenthash][ext]'
+        }
+      },
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist'], {
-      root: path.resolve(__dirname, '../')
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash].css'
     }),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
+      minify: false,
+      inject: 'body',
+      inlineSource: 'webpack-runtime.js'
     }),
-    new optimizeCss({
-      cssProcessor: require('cssnano'),
-      cssProcessorOptions: { discardComments: { removeAll: true } },
-      canPrint: true
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].[contenthash].css',
-    }),
+    new ForkTsCheckerWebpackPlugin(),
+    // new webpack.optimize.ModuleConcatenationPlugin()
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, '../src')
+    },
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
+  },
+  devtool: 'cheap-module-source-map',
   optimization: {
+    usedExports: true,
+    sideEffects: true,
+    runtimeChunk: 'single',
     splitChunks: {
+      chunks: 'all',
+      minChunks: 1,
+      minSize: 30000,
       cacheGroups: {
         vendors: {
-          name: 'vendors',
           test: /[\\/]node_modules[\\/]/,
-          chunks: 'all',
-          priority: 10
-        }
+          priority: -10
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+        },
+
       }
-    }
-  },
-  resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx'],
-    alias: {
-      '@src': path.resolve(__dirname, '../src'),
-      '@static': path.resolve(__dirname, '../src/static'),
-      '@request': path.resolve(__dirname, '../src/request'),
-      '@view': path.resolve(__dirname, '../src/view'),
-      '@components': path.resolve(__dirname, '../src/view/components'),
-    }
+    },
   }
 }

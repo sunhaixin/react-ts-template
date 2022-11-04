@@ -1,13 +1,20 @@
-const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.conf')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
+const { merge } = require('webpack-merge')
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const TerserWebpackPlugin = require('terser-webpack-plugin')
+const baseConf = require('./webpack.base.conf')
 
-module.exports = merge(baseConfig, {
+module.exports = merge(baseConf, {
+  mode: 'production',
+  devtool: 'source-map',
   plugins: [
-    new UglifyJsPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ]
+    new CleanWebpackPlugin(),
+  ],
+  optimization: {
+    minimizer: [
+      new TerserWebpackPlugin({
+        extractComments: false
+      })
+    ],
+  }
 })

@@ -1,13 +1,14 @@
-const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.conf')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
+const { merge } = require('webpack-merge')
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const baseConf = require('./webpack.base.conf')
 
-module.exports = merge(baseConfig, {
+module.exports = merge(baseConf, {
+  mode: 'development',
   plugins: [
-    new UglifyJsPlugin(),
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('test')
     })
-  ]
+  ],
 })

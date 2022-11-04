@@ -1,40 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
-    "module": "commonjs",
-    "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "sourceMap": true,
-    "allowJs": true,
-    "jsx": "react",
     "moduleResolution": "node",
-    "rootDir": "src",
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "target": "ES6",
+    "baseUrl": "./src",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "lib": ["ES6", "DOM"],
     "paths": {
-      "@src/*": ["./src/*"],
-      "@static/*": ["./src/static/*"],
-      "@request/*": ["./src/request/*"],
-      "@view/*": ["./src/view/*"],
-      "@components/*": ["./src/view/components/*"],
+      "@/*": ["./*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/setupTests.ts"
-  ],
-  "types": [
-    "typePatches"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }

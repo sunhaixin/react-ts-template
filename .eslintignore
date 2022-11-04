@@ -1,0 +1,12 @@
+# javascript
+bin/
+lib/
+dist/
+scripts/
+
+# settiing
+
+*.config.js
+
+# test
+test/**/*.js

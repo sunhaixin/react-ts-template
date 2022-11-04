@@ -1,23 +1,22 @@
 const path = require('path')
-const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.conf')
-const webpack = require('webpack')
+const { merge } = require('webpack-merge')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const baseConf = require('./webpack.base.conf')
 
-module.exports = merge(baseConfig, {
-  devtool: 'cheap-eval-source-map',
+module.exports = merge(baseConf, {
   mode: 'development',
-  devServer: {
-    contentBase: path.resolve(__dirname, './dist'),
-    port: 8081,
-    compress: true,
-    inline: true,
-    hot: true,
-    host: '0.0.0.0',
-    historyApiFallback: true,
-  },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
-  ]
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    }),
+  ],
+  devServer: {
+    hot: true,
+    open: true,
+    port: 8080,
+    historyApiFallback: true,
+    static: {
+      directory: path.resolve(__dirname, baseConf.output.path)
+    }
+  }
 })
